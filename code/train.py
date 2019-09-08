@@ -124,6 +124,8 @@ def train(loader: DataLoader, model: torch.nn.Module, criterion, optimizer: Opti
         optimizer.step()
 
         # measure elapsed time
+        print('Time')
+        print(time.time() - end)
         batch_time.update(time.time() - end)
         end = time.time()
 
