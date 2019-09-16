@@ -3,6 +3,7 @@ from typing import *
 import torch
 import os
 from torch.utils.data import Dataset
+from zipdata import ZipData
 
 # set this environment variable to the location of your imagenet directory if you want to read ImageNet data.
 # make sure your val directory is preprocessed to look like the train directory, e.g. by running this script
