@@ -8,6 +8,7 @@ from torch.utils.data import Dataset
 # make sure your val directory is preprocessed to look like the train directory, e.g. by running this script
 # https://raw.githubusercontent.com/soumith/imagenetloader.torch/master/valprep.sh
 IMAGENET_LOC_ENV = "/blob/dihe/pc/datasets/imagenet"
+IMAGENET_ON_PHILLY_DIR = "/hdfs/public/imagenet/2012/"
 
 # list of all datasets
 DATASETS = ["imagenet", "cifar10"]
@@ -72,6 +73,28 @@ def _imagenet(split: str) -> Dataset:
             transforms.ToTensor()
         ])
     return datasets.ImageFolder(subdir, transform)
+
+def _imagenet_on_philly(split: str) -> Dataset:
+        
+    trainpath = os.path.join(IMAGENET_ON_PHILLY_DIR, 'train.zip')
+    train_map = os.path.join(IMAGENET_ON_PHILLY_DIR, 'train_map.txt')
+    valpath = os.path.join(IMAGENET_ON_PHILLY_DIR, 'val.zip')
+    val_map = os.path.join(IMAGENET_ON_PHILLY_DIR, 'val_map.txt')
+
+    if split == "train":
+        return ZipData(trainpath, train_map,
+                        transforms.Compose([
+                        transforms.RandomResizedCrop(224),
+                        transforms.RandomHorizontalFlip(),
+                        transforms.ToTensor(),
+                        ]))
+    elif split == "test":
+        return ZipData(valpath, val_map, 
+                        transforms.Compose([
+                        transforms.Resize(256),
+                        transforms.CenterCrop(224),
+                        transforms.ToTensor(),
+                        ]))
 
 
 class NormalizeLayer(torch.nn.Module):
